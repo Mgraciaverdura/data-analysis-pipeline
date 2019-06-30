@@ -1,9 +1,7 @@
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
-import numpy as np
 
-from analysis import *
+import analysis
 
 if __name__=="__main__":
     csv_name='plane_crash_data.csv'
