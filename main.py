@@ -11,3 +11,4 @@ if __name__=="__main__":
     crash = data_embellish(crash)
     plot_operator(crash)
     plot_location(crash)
+    plot_date(crash)

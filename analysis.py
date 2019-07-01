@@ -6,16 +6,17 @@ def read(DataFrame):
        return crash
 
 def set_up(crash):
-       colnames = ['location','operator']
+       colnames = ['location','operator','date']
        crash = pd.DataFrame(crash, columns=colnames)
        return crash
 
 def data_cleaning(crash):
-       crash = crash.sort_values(by='operator', ascending=False)
-       crash = crash.drop_duplicates(subset=['operator', 'location']).dropna()
+       crash = crash.sort_values(by='date', ascending=False)
+       crash = crash.drop_duplicates(subset=['operator', 'location','date']).dropna()
        return crash
 
 def data_embellish(crash):
+       crash.rename(columns={'date':'Date'}, inplace=True)
        crash.rename(columns={'operator':'Operator'}, inplace=True)
        crash.rename(columns={'location':'Location'}, inplace=True)
        return crash
@@ -34,4 +35,12 @@ def plot_location(crash):
     category_data.head(5).plot('bar') 
     plt.title("Total crashes by location")
     plt.savefig('Plot by location')
+plt.show()
+
+def plot_date(crash):
+    category_data= crash.Date.str.split('|', expand=True).stack().value_counts(0)/len(crash)*100
+    category_data = category_data.round(1)
+    category_data.head(5).plot('bar') 
+    plt.title("Total crashes by date")
+    plt.savefig('Plot by date')
 plt.show()

@@ -14,7 +14,7 @@ except:
 
 from_mail = gmail_user
 to = input("Who should receive the mail?")
-body = "Buenas tardes, a continuación encontrará el informe que prometí en mandarle. Un saludo."
+body = "Buenas tardes\n, a continuación encontrará el informe que prometí en mandarle. \nUn saludo."
 
 # Send the mail to SMTP gmail server
 server.sendmail(from_mail, to, body)
