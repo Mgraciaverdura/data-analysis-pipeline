@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import calendarific
 import requests
 import numpy as np
+import argparse
 
 def give_me_df(DataFrame):
        crash = pd.read_csv(DataFrame)
@@ -13,24 +14,12 @@ def set_up(crash):
        crash = pd.DataFrame(crash, columns=colnames)
        return crash
 
-def date_clean(x): 
-    months = {"January":1, "February":2, "March":3, "April":4, "May":5, "Jun":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12}     
-    for month, numero in months.items(): 
-        if month in x: 
-            mes = numero
-    a = x.split(",")
-    dia = a[0].split()[1]
-    año = a[1].split()[0]
-    return '{}-{}-{}'.format(dia, mes, año)
+def arg_crash():
+       parser = argparse.ArgumentParser()
+       parser.add_argument('--name', required=True)
+       args = parser.parse_args()
+       print(f'Hello {args.name}')
 
-def data_clean(crash):
-       crash = crash.drop_duplicates(subset=['operator', 'location','date']).dropna()
-       crash.date = crash.date.apply(date_clean)
-       crash = crash[crash['date'].str.contains('2018')]
-       crash.rename(columns={'operator':'Operator'}, inplace=True)
-       crash.rename(columns={'location':'Location'}, inplace=True)
-       crash.rename(columns={'date':'Date'}, inplace=True)
-       return crash
 
 def api_calendarific(BASE_URL):
        API_KEY = ''
@@ -47,21 +36,18 @@ def api_calendarific(BASE_URL):
               api_df=pd.DataFrame(date, columns = ["Date of public holidays in Spain"])
        return api_df
 
-def file_CSV(crash):
-crash.to_csv('api_crash_df.csv')
-
 def plot_operator(crash):
-    category_data= crash.operator.str.split('|', expand=True).stack().value_counts(0)/len(crash)*100
-    category_data = category_data.round(1)
-    category_data.head(5).plot('bar') 
-    plt.title("Total crashes by operator")
-    plt.savefig('Plot by operator')
-    plt.show()
+       category_data= crash.operator.str.split('|', expand=True).stack().value_counts(0)/len(crash)*100
+       category_data = category_data.round(1)
+       category_data.head(5).plot('bar') 
+       plt.title("Total crashes by operator")
+       plt.savefig('Plot by operator')
+       plt.show()
 
 def plot_location(crash):
-    category_data= crash.Location.str.split('|', expand=True).stack().value_counts(0)/len(crash)*100
-    category_data = category_data.round(1)
-    category_data.head(5).plot('bar') 
-    plt.title("Total crashes by location")
-    plt.savefig('Plot by location')
-    plt.show()
+       category_data= crash.location.str.split('|', expand=True).stack().value_counts(0)/len(crash)*100
+       category_data = category_data.round(1)
+       category_data.head(5).plot('bar') 
+       plt.title("Total crashes by location")
+       plt.savefig('Plot by location')
+       plt.show()
